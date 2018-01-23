@@ -6,7 +6,7 @@ FROM  dfms/centos7:latest
 #
 # common-environment
 #
-ENV USER dfms
+ENV USER lofar-dlg
 ENV INSTALLDIR /home/${USER}/opt
 
 USER root
@@ -60,19 +60,16 @@ RUN yum -y install sudo
 RUN yum -y install git svn wget 
 RUN yum -y install automake-devel aclocal autoconf autotools cmake make
 RUN yum -y install g++ gcc gcc-c++ gcc-gfortran
-RUN yum -y install blas-devel boost-devel fftw3-devel fftw3-libs python-devel lapack-devel libpng-devel libxml2-devel numpy-devel readline-devel ncurses-devel f2py bzip2-devel libicu-devel scipy
+RUN yum -y install blas-devel boost-devel fftw3-devel fftw3-libs python-devel lapack-devel libpng-devel libxml2-devel readline-devel ncurses-devel bzip2-devel libicu-devel 
 RUN yum -y install bison flex ncurses tar bzip2 which gettext
-RUN wget --retry-connrefused https://bootstrap.pypa.io/get-pip.py -O - | python
-RUN pip install pyfits pywcs python-monetdb xmlrunner unittest2
-RUN pip install -U setuptools 
+RUN pip install pyfits pywcs python-monetdb xmlrunner unittest2 scipy 
+#RUN pip install -U setuptools 
 
 #
 # setup-account
 #
 RUN getent group sudo &>/dev/null || groupadd sudo
-RUN usermod ${USER} -u ${UID} && groupmod ${USER} -g ${UID} && chown -R ${USER}:${USER} /home/${USER}
-#RUN echo "useradd -m ${USERADD_FLAGS} ${USER}"
-#RUN useradd -m -u ${UID} ${USER}
+RUN useradd -m -u ${UID} ${USER}
 RUN usermod -a -G sudo ${USER}
 RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
 RUN sed -i 's/requiretty/!requiretty/g' /etc/sudoers
@@ -188,7 +185,7 @@ ENV PREFACTOR_VERSION V2.0.2
 
 RUN cd ${INSTALLDIR} && git clone https://github.com/darafferty/LSMTool.git && \
     if [ "$LSMTOOL_VERSION" != "latest" ]; then cd ${INSTALLDIR}/LSMTool && git checkout tags/${LSMTOOL_VERSION}; fi && \ 
-    mkdir -p /home/dfms/opt/prefactor-reqs/lib/python2.7/site-packages/ && \
+    mkdir -p /home/${USER}/opt/prefactor-reqs/lib/python2.7/site-packages/ && \
     export PYTHONPATH=${PYTHONPATH}:${INSTALLDIR}/prefactor-reqs/lib/python2.7/site-packages/ && \
     cd ${INSTALLDIR}/LSMTool && sed -i.bak 's/astropy >= 0.4/astropy >= 0.4, <3.0/g' setup.py && \
     python setup.py install --prefix=${INSTALLDIR}/prefactor-reqs
@@ -227,9 +224,20 @@ RUN sudo sh -c 'echo export PYTHONPATH=\${PYTHONPATH:+:\${PYTHONPATH}}:\${INSTAL
 RUN sudo sh -c 'echo export PYTHONPATH=\${PYTHONPATH:+:\${PYTHONPATH}}:\${INSTALLDIR}/prefactor-reqs/lib/python2.7/site-packages/ >> /usr/bin/init-lofar.sh'
 RUN sudo sh -c 'echo export PYTHONPATH=\${PYTHONPATH:+:\${PYTHONPATH}}:\${INSTALLDIR}/prefactor-reqs/lib64/python2.7/site-packages/ >> /usr/bin/init-lofar.sh'
 RUN sudo sh -c 'echo export PYTHONPATH=\${PYTHONPATH:+:\${PYTHONPATH}}:\${INSTALLDIR}/prefactor/lib/python2.7/site-packages/ >> /usr/bin/init-lofar.sh'
+RUN sudo sh -c 'echo export PYTHONPATH=\${PYTHONPATH:+:\${PYTHONPATH}}:\${INSTALLDIR}/prefactor/scripts >> /usr/bin/init-lofar.sh'
+RUN sudo sh -c 'echo export PATH=\${PATH:+:\${PATH}}:\${INSTALLDIR}/prefactor/scripts >> /usr/bin/init-lofar.sh'
 RUN sudo sh -c 'echo export PATH=\${PATH:+:\$PATH}:\${INSTALLDIR}/casacore/bin:${INSTALLDIR}/wsclean/bin  >> /usr/bin/init-lofar.sh'
 RUN sudo sh -c 'echo export LD_LIBRARY_PATH=\${LD_LIBRARY_PATH:+:\$LD_LIBRARY_PATH}:\${INSTALLDIR}/casacore/lib  >> /usr/bin/init-lofar.sh'
 RUN sudo sh -c "echo source /usr/bin/init-lofar.sh >> /usr/bin/init.sh"
+
+COPY scripts/dlg_wrappers.py ${INSTALLDIR}/prefactor/scripts
+COPY scripts/losoto_importer_wrapper.py ${INSTALLDIR}/prefactor/scripts
+COPY scripts/CopyGather.py ${INSTALLDIR}/prefactor/scripts
+COPY scripts/calibcal.py ${INSTALLDIR}/prefactor/scripts
+COPY scripts/flagave.py ${INSTALLDIR}/prefactor/scripts
+COPY scripts/helpers.py ${INSTALLDIR}/prefactor/scripts
+
+RUN sudo chown ${USER}:${USER} ${INSTALLDIR}/prefactor/scripts/* 
 
 #
 # entrypoint
