@@ -20,7 +20,7 @@
 
 import argparse
 import subprocess as SP
-from helpers import create_donemark 
+from lofar_helpers import create_donemark 
 from shutil import copytree
 
 parser = argparse.ArgumentParser(description="Wrapper around BBS calibration.")
@@ -28,8 +28,9 @@ parser.add_argument("-n", "--numthreads", required=True, help="Number of threads
 parser.add_argument("-i", "--inms", required=True, help="Output donemark file")
 parser.add_argument("-d", "--donemark", required=True, help="Output donemark file")
 parser.add_argument("-p", "--parset", required=True, help="parset file for NDPPP")
+parser.add_argument("-s", "--skymodel", required=True, help="Skymodel file")
 args = parser.parse_args()
 
-SP.call(["calibrate-stand-alone", "--numthreads {nt}".format(nt=args.numthreads), args.inms, "-p {parset}".format(parset=args.parset)])
+SP.call(["calibrate-stand-alone", "--numthreads {nt}".format(nt=args.numthreads), args.inms, "-p {parset}".format(parset=args.parset), args.skymodel])
 
 create_donemark(args.donemark) 

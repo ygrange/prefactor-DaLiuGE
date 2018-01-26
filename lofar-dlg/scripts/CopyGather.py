@@ -19,7 +19,7 @@
 #
 
 import argparse
-from helpers import check_donemark 
+from lofar_helpers import check_donemark 
 from shutil import copytree
 
 parser = argparse.ArgumentParser(description="Copy measurementset from local to shared space.")

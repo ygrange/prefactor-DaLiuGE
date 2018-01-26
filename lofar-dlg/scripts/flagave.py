@@ -20,7 +20,7 @@
 
 import argparse
 import subprocess as SP
-from helpers import create_donemark 
+from lofar_helpers import create_donemark 
 from shutil import copytree
 
 parser = argparse.ArgumentParser(description="Wrapper around NDPPP flagging and averaging.")
