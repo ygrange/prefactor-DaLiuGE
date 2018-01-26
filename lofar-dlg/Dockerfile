@@ -62,7 +62,7 @@ RUN yum -y install automake-devel aclocal autoconf autotools cmake make
 RUN yum -y install g++ gcc gcc-c++ gcc-gfortran
 RUN yum -y install blas-devel boost-devel fftw3-devel fftw3-libs python-devel lapack-devel libpng-devel libxml2-devel readline-devel ncurses-devel bzip2-devel libicu-devel 
 RUN yum -y install bison flex ncurses tar bzip2 which gettext
-RUN pip install pyfits pywcs python-monetdb xmlrunner unittest2 scipy 
+RUN pip install pyfits pywcs python-monetdb xmlrunner unittest2 scipy matplotlib pp progressbar 
 #RUN pip install -U setuptools 
 
 #
@@ -157,7 +157,7 @@ RUN cd ${INSTALLDIR}/log4cplus/build && make install
 RUN mkdir -p ${INSTALLDIR}/lofar/build/gnu_opt
 RUN if [ "${LOFAR_VERSION}" = "latest" ]; then cd ${INSTALLDIR}/lofar && svn --non-interactive -q co https://svn.astron.nl/LOFAR/trunk src; fi
 RUN if [ "${LOFAR_VERSION}" != "latest" ]; then cd ${INSTALLDIR}/lofar && svn --non-interactive -q co https://svn.astron.nl/LOFAR/tags/LOFAR-Release-${LOFAR_VERSION} src; fi
-RUN cd ${INSTALLDIR}/lofar/build/gnu_opt && cmake -DBUILD_PACKAGES="BBSKernel BBSControl pystationresponse DP3 GSM Pipeline" -DCMAKE_INSTALL_PREFIX=${INSTALLDIR}/lofar/ -DWCSLIB_ROOT_DIR=${INSTALLDIR}/wcslib/ -DCFITSIO_ROOT_DIR=${INSTALLDIR}/cfitsio/ -DCASACORE_ROOT_DIR=${INSTALLDIR}/casacore/ -DAOFLAGGER_ROOT_DIR=${INSTALLDIR}/aoflagger/ -DLOG4CPLUS_ROOT_DIR=${INSTALLDIR}/log4cplus/ -DHDF5_ROOT_DIR=${INSTALLDIR}/hdf5 -DUSE_OPENMP=True ${INSTALLDIR}/lofar/src/
+RUN cd ${INSTALLDIR}/lofar/build/gnu_opt && cmake -DBUILD_PACKAGES="pyparmdb BBSKernel BBSControl pystationresponse DP3 GSM Pipeline" -DCMAKE_INSTALL_PREFIX=${INSTALLDIR}/lofar/ -DWCSLIB_ROOT_DIR=${INSTALLDIR}/wcslib/ -DCFITSIO_ROOT_DIR=${INSTALLDIR}/cfitsio/ -DCASACORE_ROOT_DIR=${INSTALLDIR}/casacore/ -DAOFLAGGER_ROOT_DIR=${INSTALLDIR}/aoflagger/ -DLOG4CPLUS_ROOT_DIR=${INSTALLDIR}/log4cplus/ -DHDF5_ROOT_DIR=${INSTALLDIR}/hdf5 -DUSE_OPENMP=True ${INSTALLDIR}/lofar/src/
 RUN cd ${INSTALLDIR}/lofar/build/gnu_opt && make install
 
 #
