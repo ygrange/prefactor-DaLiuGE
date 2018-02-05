@@ -237,7 +237,7 @@ COPY scripts/CopyGather.py ${INSTALLDIR}/prefactor/scripts
 COPY scripts/calibcal.py ${INSTALLDIR}/prefactor/scripts
 COPY scripts/flagave.py ${INSTALLDIR}/prefactor/scripts
 COPY scripts/lofar_helpers.py ${INSTALLDIR}/prefactor/scripts
-COPY scripts/lofar.py ${INSTALLDIR}/prefactor/scripts
+COPY scripts/dlg_lofar.py ${INSTALLDIR}/prefactor/scripts
 COPY scripts/lofar_parsets/ ${INSTALLDIR}/prefactor/scripts
 RUN sudo chown ${USER}:${USER} ${INSTALLDIR}/prefactor/scripts/* 
 
