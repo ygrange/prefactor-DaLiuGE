@@ -18,4 +18,7 @@ args = parser.parse_args()
 cmd = ["/home/lofar-dlg/opt/prefactor/scripts/losotoImporter.py", args.output, "-c", str(args.complevel), "-s", args.solset]
 cmd.extend(args.inpfiles)
 
-SP.call(cmd)
+retval = SP.call(cmd)
+
+if retval != 0:
+     raise SP.CalledProcessError(retval, command)

@@ -28,7 +28,7 @@ import shutil
 from lofar_helpers import check_donemark
 import find_skymodel_cal as find_skymodel_cal_wrapped
 
-from ..drop import BarrierAppDROP
+from dlg.drop import BarrierAppDROP
 
 class CopyMS(BarrierAppDROP):
     '''
@@ -114,9 +114,9 @@ class find_skymodel_cal(BarrierAppDROP):
     def run(self):
         skymodel_path = "/home/lofar-dlg/opt/prefactor/skymodels"
         for inDrop in self.inputs:
-            if str(inDrop.name) == "MS copy":
+            if str(inDrop.name) == "MS work":
                 input_MS = inDrop.path
-            if str(inDrop.name) == "FlagAve Donemark":
+            elif str(inDrop.name) == "FlagAve Donemark":
                 donemark = inDrop
             else:
                 raise Exception("Unrecognised DROP provided {dn}. Bailing out.".format(dn=inDrop.name))

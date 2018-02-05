@@ -28,6 +28,11 @@ parser.add_argument("-d", "--donemark", required=True, help="Output donemark fil
 parser.add_argument("-p", "--parset", required=True, help="parset file for NDPPP")
 args = parser.parse_args()
 
-SP.call(["NDPPP", args.parset])
+command = ["NDPPP", args.parset]
+
+retval = SP.call(command)
+
+if retval != 0:
+     raise SP.CalledProcessError(retval, command)
 
 create_donemark(args.donemark) 

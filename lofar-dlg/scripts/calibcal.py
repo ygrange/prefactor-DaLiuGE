@@ -31,6 +31,11 @@ parser.add_argument("-p", "--parset", required=True, help="parset file for NDPPP
 parser.add_argument("-s", "--skymodel", required=True, help="Skymodel file")
 args = parser.parse_args()
 
-SP.call(["calibrate-stand-alone", "--numthreads {nt}".format(nt=args.numthreads), args.inms, "-p {parset}".format(parset=args.parset), args.skymodel])
+command = ["calibrate-stand-alone", "--numthreads {nt}".format(nt=args.numthreads), args.inms, "-p {parset}".format(parset=args.parset), args.skymodel]
+
+retval = SP.call(command)
+
+if retval != 0:
+    raise SP.CalledProcessError(retval, command)
 
 create_donemark(args.donemark) 
