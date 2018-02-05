@@ -1,0 +1,16 @@
+flags                        =  [hdf5file]
+LoSoTo.Steps                 =  [plot]
+LoSoTo.Solset                =  [sol000]
+LoSoTo.Soltab                =  [sol000/phase000]
+LoSoTo.SolType               =  [phase]
+LoSoTo.ant                   =  []
+LoSoTo.pol                   =  [XX,YY]
+LoSoTo.dir                   =  [pointing]
+LoSoTo.Steps.plot.Operation  =  PLOT
+LoSoTo.Steps.plot.PlotType   =  2D
+LoSoTo.Steps.plot.Axes       =  [time,freq]
+LoSoTo.Steps.plot.TableAxis  =  [ant]
+LoSoTo.Steps.plot.ColorAxis  =  [pol]
+LoSoTo.Steps.plot.Reference  =  {reference_station}
+LoSoTo.Steps.plot.PlotFlag   =  False
+LoSoTo.Steps.plot.Prefix     =  {inspectiondir}/cal_phases_
