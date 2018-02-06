@@ -24,14 +24,13 @@ from lofar_helpers import create_donemark
 from shutil import copytree
 
 parser = argparse.ArgumentParser(description="Wrapper around BBS calibration.")
-parser.add_argument("-n", "--numthreads", required=True, help="Number of threads to run bbs.")
 parser.add_argument("-i", "--inms", required=True, help="Output donemark file")
 parser.add_argument("-d", "--donemark", required=True, help="Output donemark file")
 parser.add_argument("-p", "--parset", required=True, help="parset file for NDPPP")
 parser.add_argument("-s", "--skymodel", required=True, help="Skymodel file")
 args = parser.parse_args()
 
-command = ["calibrate-stand-alone", "--numthreads {nt}".format(nt=args.numthreads), args.inms, "{parset}".format(parset=args.parset), args.skymodel]
+command = ["calibrate-stand-alone", args.inms, args.parset, args.skymodel]
 
 retval = SP.call(command)
 
