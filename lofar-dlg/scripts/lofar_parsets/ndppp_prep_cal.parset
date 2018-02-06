@@ -5,6 +5,7 @@
 # number of threads per process for NDPPP
 ! max_dppp_threads         = 8
 msin                   = {msin}
+msout                  = {msout}
 msin.datacolumn        = DATA
 msin.baseline          = CS*&; RS*&; CS*&RS*
 msout.datacolumn       = DATA

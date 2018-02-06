@@ -20,19 +20,17 @@
 
 import argparse
 import subprocess as SP
-from lofar_helpers import create_donemark 
 from shutil import copytree
 
 parser = argparse.ArgumentParser(description="Wrapper around NDPPP flagging and averaging.")
-parser.add_argument("-d", "--donemark", required=True, help="Output donemark file")
 parser.add_argument("-p", "--parset", required=True, help="parset file for NDPPP")
+parser.add_argument("-o", "--msout", required=True, help="Output MS")
 args = parser.parse_args()
 
-command = ["NDPPP", args.parset]
+command = ["NDPPP", args.parset, "msout={msout}".format(msout=args.msout)]
 
 retval = SP.call(command)
 
 if retval != 0:
      raise SP.CalledProcessError(retval, command)
 
-create_donemark(args.donemark) 

@@ -25,7 +25,6 @@ Module container LOFAR prefactor helper functions
 import six
 import os
 import shutil
-from lofar_helpers import check_donemark
 import find_skymodel_cal as find_skymodel_cal_wrapped
 
 from dlg.drop import BarrierAppDROP
@@ -99,6 +98,10 @@ class ParsetParseApp(BarrierAppDROP):
             uidint = str(ip.oid).split("_")[-2]
             psparsed = psparsed.replace("%i[{uid}]".format(uid=uidint),
                                         ip.path)
+        for op in self.outputs:
+            uidint = str(op.oid).split("_")[-2]
+            psparsed = psparsed.replace("%o[{uid}]".format(uid=uidint),
+                                        op.path)
 
 
         outputDrop = self.outputs[0]
@@ -112,19 +115,13 @@ class find_skymodel_cal(BarrierAppDROP):
     """wrapper around the tool to find skymodel and put it in a memoryDROP."""
 
     def run(self):
-        skymodel_path = "/home/lofar-dlg/opt/prefactor/skymodels"
-        for inDrop in self.inputs:
-            if str(inDrop.name) == "MS work":
-                input_MS = inDrop.path
-            elif str(inDrop.name) == "FlagAve Donemark":
-                donemark = inDrop
-            else:
-                raise Exception("Unrecognised DROP provided {dn}. Bailing out.".format(dn=inDrop.name))
-
+        if len(self.inputs) != 1:
+             raise Exception("This application writes only one DROP")
         if len(self.outputs) != 1:
-            raise Exception("This application writes only one DROP")
+             raise Exception("This application writes only one DROP")
 
-        check_donemark(donemark.path)
+        skymodel_path = "/home/lofar-dlg/opt/prefactor/skymodels"
+        input_MS = self.inputs[0].path
 
         outDrop = self.outputs[0]
 
