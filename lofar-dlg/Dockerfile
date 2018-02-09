@@ -157,7 +157,7 @@ RUN cd ${INSTALLDIR}/log4cplus/build && make install
 RUN mkdir -p ${INSTALLDIR}/lofar/build/gnu_opt
 RUN if [ "${LOFAR_VERSION}" = "latest" ]; then cd ${INSTALLDIR}/lofar && svn --non-interactive -q co https://svn.astron.nl/LOFAR/trunk src; fi
 RUN if [ "${LOFAR_VERSION}" != "latest" ]; then cd ${INSTALLDIR}/lofar && svn --non-interactive -q co https://svn.astron.nl/LOFAR/tags/LOFAR-Release-${LOFAR_VERSION} src; fi
-RUN cd ${INSTALLDIR}/lofar/build/gnu_opt && cmake -DBUILD_PACKAGES="pyparmdb BBSKernel BBSControl pystationresponse DP3 GSM Pipeline" -DCMAKE_INSTALL_PREFIX=${INSTALLDIR}/lofar/ -DWCSLIB_ROOT_DIR=${INSTALLDIR}/wcslib/ -DCFITSIO_ROOT_DIR=${INSTALLDIR}/cfitsio/ -DCASACORE_ROOT_DIR=${INSTALLDIR}/casacore/ -DAOFLAGGER_ROOT_DIR=${INSTALLDIR}/aoflagger/ -DLOG4CPLUS_ROOT_DIR=${INSTALLDIR}/log4cplus/ -DHDF5_ROOT_DIR=${INSTALLDIR}/hdf5 -DUSE_OPENMP=True ${INSTALLDIR}/lofar/src/
+RUN cd ${INSTALLDIR}/lofar/build/gnu_opt && cmake -DBUILD_PACKAGES="pyparmdb BBSKernel BBSControl pystationresponse DP3 GSM Pipeline ExpIon" -DCMAKE_INSTALL_PREFIX=${INSTALLDIR}/lofar/ -DWCSLIB_ROOT_DIR=${INSTALLDIR}/wcslib/ -DCFITSIO_ROOT_DIR=${INSTALLDIR}/cfitsio/ -DCASACORE_ROOT_DIR=${INSTALLDIR}/casacore/ -DAOFLAGGER_ROOT_DIR=${INSTALLDIR}/aoflagger/ -DLOG4CPLUS_ROOT_DIR=${INSTALLDIR}/log4cplus/ -DHDF5_ROOT_DIR=${INSTALLDIR}/hdf5 -DUSE_OPENMP=True ${INSTALLDIR}/lofar/src/
 RUN cd ${INSTALLDIR}/lofar/build/gnu_opt && make install
 
 #
@@ -228,7 +228,9 @@ RUN sudo sh -c 'echo export PYTHONPATH=\${PYTHONPATH:+:\${PYTHONPATH}}:\${INSTAL
 RUN sudo sh -c 'echo export PYTHONPATH=\${PYTHONPATH:+:\${PYTHONPATH}}:\${INSTALLDIR}/prefactor/scripts >> /usr/bin/init-lofar.sh'
 RUN sudo sh -c 'echo export PATH=\${PATH:+:\${PATH}}:\${INSTALLDIR}/prefactor/scripts >> /usr/bin/init-lofar.sh'
 RUN sudo sh -c 'echo export PATH=\${PATH:+:\$PATH}:\${INSTALLDIR}/casacore/bin:${INSTALLDIR}/wsclean/bin  >> /usr/bin/init-lofar.sh'
+RUN sudo sh -c 'echo export PATH=\${PATH:+:\$PATH}:\${INSTALLDIR}/losoto/bin >> /usr/bin/init-lofar.sh'
 RUN sudo sh -c 'echo export LD_LIBRARY_PATH=\${LD_LIBRARY_PATH:+:\$LD_LIBRARY_PATH}:\${INSTALLDIR}/casacore/lib  >> /usr/bin/init-lofar.sh'
+RUN sudo sh -c 'echo export LD_LIBRARY_PATH=\${LD_LIBRARY_PATH:+:\$LD_LIBRARY_PATH}:${INSTALLDIR}/hdf5/lib >> /usr/bin/init-lofar.sh'
 RUN sudo sh -c 'echo export PATH=\${PATH:+:\${PATH}}:\${INSTALLDIR}/wsclean/bin >> /usr/bin/init-lofar.sh'
 RUN sudo sh -c "echo source /usr/bin/init-lofar.sh >> /usr/bin/init.sh"
 

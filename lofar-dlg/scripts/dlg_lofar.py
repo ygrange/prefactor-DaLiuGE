@@ -26,6 +26,7 @@ import six
 import os
 import shutil
 import find_skymodel_cal as find_skymodel_cal_wrapped
+import find_cal_global_phaseoffset_losoto as find_cal_global_phaseoffset_wrapped
 
 from dlg.drop import BarrierAppDROP
 
@@ -129,3 +130,14 @@ class find_skymodel_cal(BarrierAppDROP):
 
         with open(found_skymodel) as skf:
             outDrop.write(six.b(str(skf.read())))
+
+class find_cal_global_phaseoffset_losoto(BarrierAppDROP):
+    def run(self):
+        if len(self.inputs) != 1:
+             raise Exception("This application writes only one DROP")
+        if len(self.outputs) != 1:
+             raise Exception("This application writes only one DROP")
+
+    os.mkdir(self.outputs[0].path)
+
+    find_cal_global_phaseoffset_wrapped(self.inputs[0].path, os.path.join(self.outputs[0].path,""))
