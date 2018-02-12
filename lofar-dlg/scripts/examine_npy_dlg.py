@@ -35,12 +35,12 @@ parser.add_argument("-p", "--prefix",  required=True, help="Prefix to use for Cl
 
 args = parser.parse_args()
 
-calsource =
+calsource = args.prefix
 mkdir(args.outdir)
 
 amparray   = np.load(ojoin(args.ampl, '_amplitude_array.npy'))
 clockarray = np.load(ojoin(args.ctdir, 'fitted_data_dclock_' + args.prefix + '_1st.sm.npy'))
-dtecarray  = np.load(ojoin(args.ampl, 'fitted_data_dTEC_'   + args.prefix + '_1st.sm.npy'))
+dtecarray  = np.load(ojoin(args.ctdir, 'fitted_data_dTEC_'   + args.prefix + '_1st.sm.npy'))
 
 ### From here just copy-paste from prefactor, adding the outdir
 

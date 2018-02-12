@@ -20,25 +20,19 @@
 
 import argparse
 import subprocess as SP
-from os import mkdir, chdir
+from lofar_helpers import create_donemark
 
 parser = argparse.ArgumentParser(description="Wrapper around BBS calibration.")
 parser.add_argument("-i", "--inh5", required=True, help="Input HDF5 file")
-parser.add_argument("-d", "--outdir", required=True, help="Output directory")
-parser.add_argument("-c", "--numcpus", required=True, help="Number of cpus to use")
-parser.add_argument("-p", "--prefix",  required=True, help="Prefix to use")
+parser.add_argument("-d", "--donemark", required=True, help="Output donemark file")
+parser.add_argument("-p", "--parset", required=True, help="parset file for NDPPP")
 args = parser.parse_args()
 
-mkdir(args.outdir)
-
-chdir(args.outdir)
-
-command = ["fit_clocktec_initialguess_losoto.py", args.inh5, args.prefix, args.numcpus]
+command = ["losoto", args.inh5, args.parset]
 
 retval = SP.call(command)
 
 if retval != 0:
     raise SP.CalledProcessError(retval, command)
 
-
-
+create_donemark(args.donemark)

@@ -22,14 +22,17 @@ import argparse
 import subprocess as SP
 from os import mkdir
 from os.path import join as ojoin
+from lofar_helpers import check_donemark, create_donemark
 
 parser = argparse.ArgumentParser(description="Wrapper around BBS calibration.")
 parser.add_argument("-i", "--inh5", required=True, help="Input HDF5 file")
-parser.add_argument("-d", "--outdir", required=True, help="Output directory")
-parser.add_argument("-c", "--chans", required=True, help="Chane;s per sub band")
-
+parser.add_argument("-o", "--outdir", required=True, help="Output directory")
+parser.add_argument("-c", "--chans", required=True, help="Chanels per sub band")
+parser.add_argument("-d", "--donemark_in", required=True, help="Input donemark")
+parser.add_argument("-e", "--donemark_out", required=True, help="Output donemark")
 args = parser.parse_args()
 
+check_donemark(args.donemark_in)
 mkdir(args.outdir)
 
 
@@ -40,5 +43,5 @@ retval = SP.call(command)
 if retval != 0:
     raise SP.CalledProcessError(retval, command)
 
-
+create_donemark(args.donemark_out)
 

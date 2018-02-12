@@ -27,6 +27,7 @@ import os
 import shutil
 import find_skymodel_cal as find_skymodel_cal_wrapped
 import find_cal_global_phaseoffset_losoto as find_cal_global_phaseoffset_wrapped
+from lofar_helpers import check_donemark, create_donemark
 
 from dlg.drop import BarrierAppDROP
 
@@ -132,12 +133,31 @@ class find_skymodel_cal(BarrierAppDROP):
             outDrop.write(six.b(str(skf.read())))
 
 class find_cal_global_phaseoffset_losoto(BarrierAppDROP):
+    """wrapper around the losoto calibration of the global phase offset"""
     def run(self):
-        if len(self.inputs) != 1:
-             raise Exception("This application writes only one DROP")
-        if len(self.outputs) != 1:
-             raise Exception("This application writes only one DROP")
+        if len(self.inputs) != 2:
+             raise Exception("This application reads two DROPs")
+        if len(self.outputs) != 2:
+             raise Exception("This application writes two DROPs")
 
-    os.mkdir(self.outputs[0].path)
+        for indrop in self.inputs:
+            if "donemark" in indrop.name:
+                in_donemark_drop = indrop
+            elif "Output h5" == indrop.name:
+                inph5 = indrop
+            else:
+                raise Exception("Output DROP with name {odnam} unknown!".format(odnam = indrop.name))
 
-    find_cal_global_phaseoffset_wrapped(self.inputs[0].path, os.path.join(self.outputs[0].path,""))
+        for outdrop in self.outputs:
+            if "donemark" in outdrop.name:
+                out_donemark_drop = outdrop
+            elif "Phase solutions" == outdrop.name:
+                phsol = outdrop
+            else:
+                raise Exception("Output DROP with name {odnam} unknown!".format(odnam = outdrop.name))
+
+        check_donemark(in_donemark_drop.path)
+        os.mkdir(phsol.path)
+
+        find_cal_global_phaseoffset_wrapped.main(inph5.path, os.path.join(phsol.path,""))
+        create_donemark(out_donemark_drop.path)

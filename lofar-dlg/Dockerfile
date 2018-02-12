@@ -230,7 +230,7 @@ RUN sudo sh -c 'echo export PATH=\${PATH:+:\${PATH}}:\${INSTALLDIR}/prefactor/sc
 RUN sudo sh -c 'echo export PATH=\${PATH:+:\$PATH}:\${INSTALLDIR}/casacore/bin:${INSTALLDIR}/wsclean/bin  >> /usr/bin/init-lofar.sh'
 RUN sudo sh -c 'echo export PATH=\${PATH:+:\$PATH}:\${INSTALLDIR}/losoto/bin >> /usr/bin/init-lofar.sh'
 RUN sudo sh -c 'echo export LD_LIBRARY_PATH=\${LD_LIBRARY_PATH:+:\$LD_LIBRARY_PATH}:\${INSTALLDIR}/casacore/lib  >> /usr/bin/init-lofar.sh'
-RUN sudo sh -c 'echo export LD_LIBRARY_PATH=\${LD_LIBRARY_PATH:+:\$LD_LIBRARY_PATH}:${INSTALLDIR}/hdf5/lib >> /usr/bin/init-lofar.sh'
+RUN sudo sh -c 'echo export LD_LIBRARY_PATH=\${LD_LIBRARY_PATH:+:\$LD_LIBRARY_PATH}:\${INSTALLDIR}/hdf5/lib >> /usr/bin/init-lofar.sh'
 RUN sudo sh -c 'echo export PATH=\${PATH:+:\${PATH}}:\${INSTALLDIR}/wsclean/bin >> /usr/bin/init-lofar.sh'
 RUN sudo sh -c "echo source /usr/bin/init-lofar.sh >> /usr/bin/init.sh"
 
@@ -240,6 +240,10 @@ COPY scripts/calibcal.py ${INSTALLDIR}/prefactor/scripts
 COPY scripts/flagave.py ${INSTALLDIR}/prefactor/scripts
 COPY scripts/lofar_helpers.py ${INSTALLDIR}/prefactor/scripts
 COPY scripts/dlg_lofar.py ${INSTALLDIR}/prefactor/scripts
+COPY scripts/losoto_amp_wrap.py  ${INSTALLDIR}/prefactor/scripts
+COPY scripts/losoto_clocktecfit.py ${INSTALLDIR}/prefactor/scripts
+COPY scripts/examine_npy_dlg.py ${INSTALLDIR}/prefactor/scripts
+COPY scripts/wrap_losoto.py ${INSTALLDIR}/prefactor/scripts
 COPY scripts/lofar_parsets ${INSTALLDIR}/prefactor/scripts/lofar_parsets
 RUN sudo chown ${USER}:${USER} ${INSTALLDIR}/prefactor/scripts/* 
 
