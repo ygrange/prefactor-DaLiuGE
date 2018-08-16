@@ -1,12 +1,11 @@
 #
 # base
 #
-FROM  dfms/centos7:latest
+FROM dlglofar-base/centos7:latest
 
 #
 # common-environment
 #
-ENV USER lofar-dlg
 ENV INSTALLDIR /home/${USER}/opt
 
 USER root
@@ -54,25 +53,12 @@ ENV J 64
 #
 # base
 #
-RUN yum -y remove iputils
-RUN yum -y update
-RUN yum -y install sudo
-RUN yum -y install git svn wget 
 RUN yum -y install automake-devel aclocal autoconf autotools cmake make
 RUN yum -y install g++ gcc gcc-c++ gcc-gfortran
 RUN yum -y install blas-devel boost-devel fftw3-devel fftw3-libs python-devel lapack-devel libpng-devel libxml2-devel readline-devel ncurses-devel bzip2-devel libicu-devel 
 RUN yum -y install bison flex ncurses tar bzip2 which gettext
 RUN pip install pyfits pywcs python-monetdb xmlrunner unittest2 scipy matplotlib pp progressbar 
 #RUN pip install -U setuptools 
-
-#
-# setup-account
-#
-RUN getent group sudo &>/dev/null || groupadd sudo
-RUN useradd -m -u ${UID} ${USER}
-RUN usermod -a -G sudo ${USER}
-RUN echo '%sudo ALL=(ALL) NOPASSWD:ALL' >> /etc/sudoers
-RUN sed -i 's/requiretty/!requiretty/g' /etc/sudoers
 
 USER ${USER}
 
