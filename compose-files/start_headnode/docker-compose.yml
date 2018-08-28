@@ -1,0 +1,47 @@
+# Docker-compose for LOFAR
+version: '3.2'
+services:
+  lofar-dlg-dim:
+    image: "dlglofar-base/centos7"
+    network_mode: "host"
+    labels:
+      NAME: "lofar_daliuge_dim"
+    entrypoint:
+      - dlg 
+      - dim
+      - -w
+      - /local/workdir
+      - -H 0.0.0.0
+      - -l
+      - /local/workdir/log/
+      - -N
+      - r815,e6
+      - -vvvv
+    volumes:
+      - type: bind
+        source: /local/grange/dlg_work
+        target: /local/workdir
+    restart: always
+
+  lofar-dlg-lgweb:
+    image: "dlglofar-base/centos7"
+    network_mode: "host"
+    labels:
+      NAME: "lofar_daliuge_lgweb"
+    entrypoint:
+      - dlg 
+      - lgweb 
+      - -d
+      - /local/dlg-logical-graphs
+      - -t
+      - /local/workdir/dlg-lgweb 
+    volumes:
+      - type: bind
+        source: /home/grange/work/18/DaLiuGE/daliuge-logical-graphs
+        target: /local/dlg-logical-graphs
+      - type: bind
+        source: /local/grange/dlg_work
+        target: /local/workdir
+    restart: always
+
+
