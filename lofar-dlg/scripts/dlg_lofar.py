@@ -123,7 +123,7 @@ class find_skymodel_cal(BarrierAppDROP):
              raise Exception("This application writes only one DROP")
 
         skymodel_path = "/home/lofar-dlg/opt/prefactor/skymodels"
-        input_MS = self.inputs[0].path
+        input_MS = str(self.inputs[0].path)
 
         outDrop = self.outputs[0]
 

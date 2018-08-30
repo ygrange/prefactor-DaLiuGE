@@ -6,7 +6,7 @@ services:
     network_mode: "host"
     labels:
       NAME: "lofar_daliuge"
-    entrypoint:
+    command:
       - dlg 
       - nm 
       - -w
@@ -22,5 +22,8 @@ services:
       - type: bind
         source: /local/grange/dlg_work
         target: /local/workdir
+      - type: bind
+        source: /var/scratch/grange/Daliuge/shared
+        target: /local/shared
 #    restart: always
 

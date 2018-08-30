@@ -219,6 +219,10 @@ RUN sudo sh -c 'echo export LD_LIBRARY_PATH=\${LD_LIBRARY_PATH:+:\$LD_LIBRARY_PA
 RUN sudo sh -c 'echo export LD_LIBRARY_PATH=\${LD_LIBRARY_PATH:+:\$LD_LIBRARY_PATH}:\${INSTALLDIR}/hdf5/lib >> /usr/bin/init-lofar.sh'
 RUN sudo sh -c 'echo export PATH=\${PATH:+:\${PATH}}:\${INSTALLDIR}/wsclean/bin >> /usr/bin/init-lofar.sh'
 RUN sudo sh -c "echo source /usr/bin/init-lofar.sh >> /usr/bin/init.sh"
+RUN sudo sh -c 'echo "#!/bin/bash" > /usr/bin/entrypoint.sh'
+RUN sudo sh -c 'echo source /usr/bin/init.sh >> /usr/bin/entrypoint.sh'
+RUN sudo sh -c 'echo exec \"\$\@\" >> /usr/bin/entrypoint.sh'
+RUN sudo sh -c 'chmod 755 /usr/bin/entrypoint.sh'
 
 COPY scripts/losoto_importer_wrapper.py ${INSTALLDIR}/prefactor/scripts
 COPY scripts/CopyGather.py ${INSTALLDIR}/prefactor/scripts
@@ -236,5 +240,5 @@ RUN sudo chown ${USER}:${USER} ${INSTALLDIR}/prefactor/scripts/*
 #
 # entrypoint
 #
-ENTRYPOINT /bin/bash --init-file /usr/bin/init.sh
+ENTRYPOINT ["/usr/bin/entrypoint.sh"] 
 

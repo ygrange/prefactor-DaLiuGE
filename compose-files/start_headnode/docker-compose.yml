@@ -2,7 +2,7 @@
 version: '3.2'
 services:
   lofar-dlg-dim:
-    image: "dlglofar-base/centos7"
+    image: "dfms/centos7"
     network_mode: "host"
     labels:
       NAME: "lofar_daliuge_dim"
@@ -15,7 +15,7 @@ services:
       - -l
       - /local/workdir/log/
       - -N
-      - r815,e6
+      - e6,r815,phi,e5v3
       - -vvvv
     volumes:
       - type: bind
@@ -24,7 +24,7 @@ services:
     restart: always
 
   lofar-dlg-lgweb:
-    image: "dlglofar-base/centos7"
+    image: "dfms/centos7"
     network_mode: "host"
     labels:
       NAME: "lofar_daliuge_lgweb"
